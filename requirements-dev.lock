@@ -12,6 +12,8 @@
 -e file:.
 altair==5.4.1
     # via streamlit
+annotated-types==0.7.0
+    # via pydantic
 attrs==24.2.0
     # via jsonschema
     # via referencing
@@ -86,6 +88,12 @@ protobuf==5.28.0
     # via streamlit
 pyarrow==17.0.0
     # via streamlit
+pydantic==2.8.2
+    # via pydantic-settings
+pydantic-core==2.20.1
+    # via pydantic
+pydantic-settings==2.4.0
+    # via my-own-spotify-hitster
 pydeck==0.9.1
     # via streamlit
 pygments==2.18.0
@@ -93,6 +101,8 @@ pygments==2.18.0
 pytest==8.3.2
 python-dateutil==2.9.0.post0
     # via pandas
+python-dotenv==1.0.1
+    # via pydantic-settings
 pytz==2024.1
     # via pandas
 pyyaml==6.0.2
@@ -128,6 +138,8 @@ tornado==6.4.1
 typing-extensions==4.12.2
     # via altair
     # via mypy
+    # via pydantic
+    # via pydantic-core
     # via streamlit
 tzdata==2024.1
     # via pandas

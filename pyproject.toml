@@ -8,6 +8,7 @@ authors = [
 dependencies = [
     "streamlit>=1.38.0",
     "spotipy>=2.24.0",
+    "pydantic-settings>=2.4.0",
 ]
 readme = "README.md"
 requires-python = ">= 3.8"
@@ -33,30 +34,6 @@ packages = ["src/my_own_spotify_hitster"]
 
 [tool.ruff]
 line-length = 120
-select = [
-    "E",   # pycodestyle
-    "F",   # pyflakes
-    "UP",  # pyupgrade
-    "D",   # pydocstyle
-    "B",   # flake8-bugbear
-    "C4",  # flake8-comprehensions
-    "A",   # flake8-builtins
-    "C90", # mccabe complexity
-    "I",   # isort
-    "PT",  # flake8-pytest-style
-    "FAST", # FastAPI
-    "RUF", # ruff
-]
-ignore = [
-    "B905", # length-checking in zip() only introduced with Python 3.10 (PEP618)
-    "D202",  # No blank lines allowed after function docstring
-    "D100",  # Missing docstring in public module
-    "D104",  # Missing docstring in public package
-    "D205",  # 1 blank line required between summary line and description
-    "D203",  # One blank line before class docstring
-    "D212",  # Multi-line docstring summary should start at the first line
-    "D415",  # First line should end with a period, question mark, or exclamation point
-]
 exclude = [
     ".git",
     ".local",
@@ -69,7 +46,30 @@ exclude = [
     "build",
     "dist",
 ]
-
-[tool.ruff.mccabe]
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle
+    "F",   # pyflakes
+    "UP",  # pyupgrade
+    "D",   # pydocstyle
+    "B",   # flake8-bugbear
+    "C4",  # flake8-comprehensions
+    "A",   # flake8-builtins
+    "C90", # mccabe complexity
+    "I",   # isort
+    "PT",  # flake8-pytest-style
+    "RUF", # ruff
+]
+ignore = [
+    "B905", # length-checking in zip() only introduced with Python 3.10 (PEP618)
+    "D202",  # No blank lines allowed after function docstring
+    "D100",  # Missing docstring in public module
+    "D104",  # Missing docstring in public package
+    "D205",  # 1 blank line required between summary line and description
+    "D203",  # One blank line before class docstring
+    "D212",  # Multi-line docstring summary should start at the first line
+    "D415",  # First line should end with a period, question mark, or exclamation point
+]
+[tool.ruff.lint.mccabe]
 # Flag errors (`C901`) whenever the complexity level exceeds 10.
 max-complexity = 10
