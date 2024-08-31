@@ -1,0 +1,32 @@
+default_language_version:
+  python: python3.12
+
+repos:
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+    - id: end-of-file-fixer
+      exclude: ^(.*.xlsx|.+.xls|.*.csv|.*.json|.*.pkl)
+    - id: trailing-whitespace
+    - id: check-yaml
+    - id: check-docstring-first
+    - id: check-added-large-files
+      name: Check for added large files
+      description: Prevent giant files from being committed
+      entry: check-added-large-files
+      language: python
+      args: ['--maxkb=350', '--enforce-all']
+    - id: detect-private-key
+
+-   repo: https://github.com/charliermarsh/ruff-pre-commit
+    rev: 'v0.6.3'
+    hooks:
+      - id: ruff
+        args: [--fix, --exit-non-zero-on-fix]
+      - id: ruff-format
+
+-   repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.11.2
+    hooks:
+    -   id: mypy
+        additional_dependencies: [types-toml, types-requests, types-python-dateutil]
