@@ -34,7 +34,7 @@ def update_score_view():
 ##### Streamlit starts #####
 sp = get_spotify_client()
 
-st.header(st.session_state.source)
+st.header(f"Music source: {st.session_state.source}")
 # Create a score for each player containing the number of correct guesses
 update_score_view()
 

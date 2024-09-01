@@ -8,6 +8,7 @@ Things that need to be done:
     1. From a given Playlist
     2. From recommendations
 3. Have an interface
+   4. Each player should have their songs displayed
 
 # Run the app
 1. Install dependencies:
