@@ -34,9 +34,9 @@ class DragAndDropBase(ui.element):
     def move_card(self) -> None:
         """Remove the card from the origin column and put it in the target column."""
         global dragged  # pylint: disable=global-statement
+        self.unhighlight()
         if dragged is None:
             return
-        self.unhighlight()
         if dragged.parent_slot is not None:
             dragged.parent_slot.parent.remove(dragged)
         with self:
