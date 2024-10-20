@@ -12,4 +12,4 @@ class Settings(BaseSettings):
 
 
 ROOT_DIR = Path(__file__).resolve().parent.parent
-settings = Settings(_env_file=ROOT_DIR.parent / ".env")
+settings = Settings(_env_file=ROOT_DIR.parent / ".env")  # type: ignore

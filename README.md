@@ -18,5 +18,5 @@ rye sync
 
 2. Start app:
 ```shell
-streamlit run src\my_own_spotify_hitster\app.py
+python src\my_own_spotify_hitster\main.py
 ```
