@@ -6,9 +6,9 @@ authors = [
     { name = "Kevin", email = "hans-bambel@gmx.net" }
 ]
 dependencies = [
-    "streamlit>=1.38.0",
     "spotipy>=2.24.0",
     "pydantic-settings>=2.4.0",
+    "nicegui>=2.4.0",
 ]
 readme = "README.md"
 requires-python = ">= 3.8"
