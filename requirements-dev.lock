@@ -107,12 +107,12 @@ propcache==0.2.0
     # via yarl
 pscript==0.7.7
     # via vbuild
-pydantic==2.8.2
+pydantic==2.9.2
     # via fastapi
     # via pydantic-settings
-pydantic-core==2.20.1
+pydantic-core==2.23.4
     # via pydantic
-pydantic-settings==2.4.0
+pydantic-settings==2.6.0
     # via my-own-spotify-hitster
 pygments==2.18.0
     # via nicegui
