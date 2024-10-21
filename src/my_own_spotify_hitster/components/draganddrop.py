@@ -1,65 +1,9 @@
-from __future__ import annotations
-
 from collections.abc import Callable
 
 from nicegui import ui
 
 from my_own_spotify_hitster.components.game_state import SpotifySong
-
-dragged: Card | None = None
-
-
-class DragAndDropBase(ui.element):
-    """Parent class for drag and drop elements."""
-
-    def __init__(self, name: str, on_drop: Callable[[SpotifySong, str], None] | None = None, *args, **kwargs) -> None:
-        """Initialize the element."""
-        super().__init__(*args, **kwargs)
-        with self.classes("bg-blue-grey-2 w-60 p-4 rounded shadow-2"):
-            ui.label(name).classes("text-bold ml-1")
-        self.name = name
-        self.on("dragover.prevent", self.highlight)
-        self.on("dragleave", self.unhighlight)
-        self.on("drop", self.move_card)
-        self.on_drop = on_drop
-
-    def highlight(self) -> None:
-        """Set style for highlighting."""
-        self.classes(remove="bg-blue-grey-2", add="bg-blue-grey-3")
-
-    def unhighlight(self) -> None:
-        """Set style for un-highlighting."""
-        self.classes(remove="bg-blue-grey-3", add="bg-blue-grey-2")
-
-    def move_card(self) -> None:
-        """Remove the card from the origin column and put it in the target column."""
-        global dragged  # pylint: disable=global-statement
-        self.unhighlight()
-        if dragged is None:
-            return
-        if dragged.parent_slot is not None:
-            dragged.parent_slot.parent.remove(dragged)
-        with self:
-            Card(dragged.item)
-        if self.on_drop:
-            self.on_drop(dragged.item, self.name)
-        dragged = None
-
-
-class Column(DragAndDropBase, ui.column):
-    """Drag and drop column."""
-
-    def __init__(self, name: str, on_drop: Callable[[SpotifySong, str], None] | None = None, *args, **kwargs) -> None:
-        """Initialize a Column-wise drag-and-drop element."""
-        super().__init__(name, on_drop, *args, **kwargs)
-
-
-class Row(DragAndDropBase, ui.row):
-    """Drag and drop row."""
-
-    def __init__(self, name: str, on_drop: Callable[[SpotifySong, str], None] | None = None, *args, **kwargs) -> None:
-        """Initialize a Row-wise drag-and-drop element."""
-        super().__init__(name, on_drop, *args, **kwargs)
+from my_own_spotify_hitster.config import ROOT_DIR
 
 
 class Card(ui.card):
@@ -76,9 +20,46 @@ class Card(ui.card):
                 ui.label(f"Release year:\n{item.release_year}")
             else:
                 ui.label("?")
-        self.on("dragstart", self.handle_dragstart)
 
-    def handle_dragstart(self) -> None:
-        """Set the current dragged card to this one."""
-        global dragged  # pylint: disable=global-statement
-        dragged = self
+
+class SortableElement(ui.element, component=ROOT_DIR / "my_own_spotify_hitster" / "resources" / "sortable_element.js"):  # type: ignore
+    """Sortable Row element."""
+
+    def __init__(self, *args, group: str, on_change: Callable | None = None, **kwargs) -> None:
+        """Assign the group and on_change-function."""
+        super().__init__()
+        self.on("item-drop", self.drop)
+        self.on_change = on_change
+
+        self._props["group"] = group
+
+    def drop(self, e) -> None:
+        """Run the on_change function."""
+        if self.on_change:
+            self.on_change(e)
+
+    def makeSortable(self) -> None:
+        """Make the element sortable."""
+        self.run_method("makeSortable")
+
+    def getitems(self) -> None:
+        """Get the items in the element."""
+        return self.run_method("getitems")
+
+
+class SortableRow(SortableElement):
+    """Sortable Row element."""
+
+    def __init__(self, group: str, on_change: Callable | None = None, *args, **kwargs) -> None:
+        """Initialize a row that is sortable."""
+        super().__init__(*args, group=group, on_change=on_change, **kwargs)
+        self._classes.append("nicegui-row")
+
+
+class SortableColumn(SortableElement):
+    """Sortable Column element."""
+
+    def __init__(self, group: str, on_change: Callable | None = None, *args, **kwargs) -> None:
+        """Initialize a column that is sortable."""
+        super().__init__(*args, group=group, on_change=on_change, **kwargs)
+        self._classes.append("nicegui-column")

@@ -5,8 +5,6 @@ from my_own_spotify_hitster.components.game_board import draw_gameboard
 
 game = MoshGame()
 
-ui.page_title("MOSH")
-
 with ui.row().classes("w-full items-center"):
     result = ui.label().classes("mr-auto")
     with ui.button(icon="menu"):
@@ -34,4 +32,4 @@ draw_gameboard(game)
 # ''')
 # ui.on('item_drop', lambda e: ui.context.client.elements[int(e.args['id'][1:])].move(target_index=e.args['new_index']))
 
-ui.run()
+ui.run(title="MOSH")

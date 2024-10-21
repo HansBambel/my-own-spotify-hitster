@@ -1,9 +1,15 @@
 from nicegui import ui
 
 import my_own_spotify_hitster.components.draganddrop as dnd
+from my_own_spotify_hitster.components.draganddrop import SortableRow
 from my_own_spotify_hitster.components.game_state import MoshGame, SpotifySong
 
 sizing_str = "justify-content: flex-start; w-full"
+
+
+def notify(item, location: str) -> None:
+    """Notify the player about the card movement."""
+    ui.notify(f"Dropped {item.title} on {location}")
 
 
 @ui.refreshable
@@ -12,7 +18,8 @@ def draw_current_card(song: SpotifySong | None) -> None:
     if song is None:
         return
 
-    with dnd.Column("New Song"):
+    with SortableRow(group="test"):
+        ui.label("New song").classes("text-bold ml-1")
         dnd.Card(song)
 
 
@@ -21,11 +28,6 @@ def prepare_for_new_song(game: MoshGame, switch) -> None:
     game.get_new_song()
     draw_current_card.refresh()
     switch.set_value(False)
-
-
-def notify(item, location: str) -> None:
-    """Notify the player about the card movement."""
-    ui.notify(f"Dropped {item.title} on {location}")
 
 
 def draw_gameboard(game: MoshGame) -> None:
@@ -58,5 +60,8 @@ def draw_gameboard(game: MoshGame) -> None:
             # The board game
             ui.separator()
             for i in range(game.number_players):
-                dnd.Row(f"Player {i + 1}", wrap=False, align_items="center", on_drop=notify).classes(sizing_str)
-                ui.separator()
+                with ui.row():
+                    ui.label(f"Player {i + 1}").classes("text-bold ml-1")
+                    SortableRow(group="test")
+                # dnd.Row(f"Player {i + 1}", wrap=False, align_items="center", on_drop=notify).classes(sizing_str)
+                # ui.separator()
