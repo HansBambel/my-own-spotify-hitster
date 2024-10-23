@@ -3,6 +3,8 @@ from nicegui import ui
 import my_own_spotify_hitster.components.draganddrop as dnd
 from my_own_spotify_hitster.components.draganddrop import SortableColumn, SortableRow
 from my_own_spotify_hitster.components.game_state import MoshGame, SpotifySong
+from my_own_spotify_hitster.config import ROOT_DIR
+from my_own_spotify_hitster.spotify_functions import play_pause
 
 sizing_str = "self-center items-center justify-center w-1/2"
 
@@ -47,14 +49,11 @@ def draw_gameboard(game: MoshGame) -> None:
                     new_song_button.on("click", lambda: prepare_for_new_song(game, reveal_switch))
                 draw_current_card(game.current_song)
 
-                # TODO implement functionality
                 with ui.column():
-                    ui.button(icon="play_circle")
-                    ui.button(icon="pause_circle")
-                # Toggle for play/pause
-                # with ui.button():
-                #     ui.label("Play/Pause")
-                #     ui.icon(ROOT_DIR / "my_own_spotify_hitster" / "play_pause.svg")
+                    # Toggle for play/pause
+                    with ui.button(on_click=play_pause):
+                        ui.label("Play/Pause")
+                        ui.image(ROOT_DIR / "my_own_spotify_hitster" / "play_pause.svg")
 
         with splitter.after:
             # The board game
