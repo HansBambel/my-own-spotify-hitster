@@ -1,20 +1,13 @@
 import logging
-from dataclasses import dataclass
-from typing import ClassVar
+
+from my_own_spotify_hitster.spotify_functions import (
+    SpotifySong,
+    from_recommendation_to_spotify_song,
+    get_recommendations,
+    get_songs_from_saved_playlist,
+)
 
 logger = logging.getLogger(__name__)
-
-
-@dataclass
-class SpotifySong:
-    """Class containing info about a Song form Spotify."""
-
-    title: str = "?"
-    artist: str = "?"
-    release_year: int = 0
-    album: str | None = None
-    reveal: bool = True
-
 
 default_song = SpotifySong(
     title="Never gonna give you up",
@@ -30,13 +23,23 @@ class MoshGame:
 
     number_players: int
     round: int = 1
-    past_songs: ClassVar[list[SpotifySong]] = []
+    past_songs: list[SpotifySong]
+    recommendations_based_on: list
+    upcoming_recommended_songs: list[SpotifySong]
 
     def __init__(self, number_players: int = 2) -> None:
         """Initialize MOSH game state."""
         self.number_players = number_players
-        # TODO remove the default song
-        self.past_songs.append(default_song)
+
+        self.recommendations_based_on = get_songs_from_saved_playlist()
+        self._fill_upcoming_songs()
+        self.past_songs = [self.upcoming_recommended_songs.pop(0)]
+
+    def _fill_upcoming_songs(self):
+        upcoming_recommended_songs_raw = get_recommendations(self.recommendations_based_on)
+        self.upcoming_recommended_songs = [
+            from_recommendation_to_spotify_song(song) for song in upcoming_recommended_songs_raw
+        ]
 
     @property
     def current_song(self) -> SpotifySong | None:
@@ -45,8 +48,8 @@ class MoshGame:
 
     def get_new_song(self) -> SpotifySong:
         """Call the spotify API to get a new song."""
-        logger.info("Get new song from Spotify")
-        # TODO: Get currently playing song
-        new_song = default_song
+        if len(self.upcoming_recommended_songs) == 0:
+            self._fill_upcoming_songs()
+        new_song = self.upcoming_recommended_songs.pop(0)
         self.past_songs.append(new_song)
         return new_song

@@ -1,9 +1,27 @@
+import logging
+import random
+import re
+from dataclasses import dataclass
 from functools import lru_cache
 
 import spotipy
 from spotipy import SpotifyOAuth
 
 from my_own_spotify_hitster.config import settings
+
+logger = logging.getLogger(__name__)
+
+
+@dataclass
+class SpotifySong:
+    """Class containing info about a Song form Spotify."""
+
+    title: str = "?"
+    artist: str = "?"
+    release_year: int = 0
+    album: str | None = None
+    uri: str | None = None
+    reveal: bool = False
 
 
 @lru_cache(maxsize=1)
@@ -20,11 +38,62 @@ def get_spotify_client():
     return sp
 
 
-def play_pause():
+def play_pause(song: SpotifySong | None = None, resume: bool = True):
     """Play or pause the currently playing song."""
     sp = get_spotify_client()
     playback = sp.current_playback()
     if playback["is_playing"]:
         sp.pause_playback()
-    else:
-        sp.start_playback()
+    elif resume:
+        if song and song.uri:
+            sp.start_playback(uris=[song.uri])
+        else:
+            logger.warning(f"Error trying to play song: {song}")
+            sp.start_playback()
+
+
+def get_songs_from_saved_playlist(amount=5) -> list:
+    """Get the current users saved playlist and get `amount` songs from it."""
+    sp = get_spotify_client()
+
+    liked_playlist = sp.current_user_saved_tracks()
+    number_of_songs = liked_playlist["total"]
+    # Get random songs from that list
+    song_ids = random.sample(range(number_of_songs), k=amount)
+    songs = [sp.current_user_saved_tracks(limit=1, offset=offset)["items"][0] for offset in song_ids]
+    return songs
+
+
+def get_recommendations(based_on: list) -> list:
+    """Get (popular) recommendations based on the given list (in spotify track data model)."""
+    sp = get_spotify_client()
+    songs = [song["track"]["id"] for song in based_on]
+    recommendations = sp.recommendations(seed_tracks=songs, min_popularity=69)
+    return recommendations["tracks"]
+
+
+def from_recommendation_to_spotify_song(recommendation: dict) -> SpotifySong:
+    """Convert from spotify data model to own Spotify Song model."""
+    release_year = re.findall(r"\d{4}", recommendation["album"]["release_date"])
+    if not release_year:
+        raise RuntimeError(f"Could not find release year in album: {recommendation['album']}")
+    return SpotifySong(
+        title=recommendation["name"],
+        album=recommendation["album"]["name"],
+        artist=recommendation["artists"][0]["name"],
+        release_year=release_year[0],
+        uri=recommendation["uri"],
+    )
+
+
+if __name__ == "__main__":
+    # songs = get_songs_from_saved_playlist()
+    # recommendations = get_recommendations(songs)
+
+    song = {
+        "album": {"name": "<AlbumName>", "release_date": "2024-07-23"},
+        "artists": [{"name": "<NAME>"}],
+        "name": "<SongName>",
+        "uri": "<some-uri>",
+    }
+    print(from_recommendation_to_spotify_song(song))

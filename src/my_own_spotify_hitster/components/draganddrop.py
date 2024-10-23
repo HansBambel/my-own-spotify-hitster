@@ -2,8 +2,8 @@ from collections.abc import Callable
 
 from nicegui import ui
 
-from my_own_spotify_hitster.components.game_state import SpotifySong
 from my_own_spotify_hitster.config import ROOT_DIR
+from my_own_spotify_hitster.spotify_functions import SpotifySong
 
 
 class Card(ui.card):

@@ -1,3 +1,4 @@
+import logging
 from pathlib import Path
 
 from pydantic_settings import BaseSettings
@@ -9,7 +10,11 @@ class Settings(BaseSettings):
     CLIENT_ID: str
     CLIENT_SECRET: str
     REDIRECT_URI: str = "http://localhost:8000"
+    LOG_LEVEL: str = "DEBUG"
 
 
 ROOT_DIR = Path(__file__).resolve().parent.parent
 settings = Settings(_env_file=ROOT_DIR.parent / ".env")  # type: ignore
+
+logging.basicConfig()
+logging.getLogger().setLevel(settings.LOG_LEVEL)
