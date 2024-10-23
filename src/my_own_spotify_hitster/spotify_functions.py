@@ -12,6 +12,12 @@ from my_own_spotify_hitster.config import settings
 logger = logging.getLogger(__name__)
 
 
+class NoActiveDeviceFoundError(Exception):
+    """Special Error case when no device is found."""
+
+    pass
+
+
 @dataclass
 class SpotifySong:
     """Class containing info about a Song form Spotify."""
@@ -42,6 +48,8 @@ def play_pause(song: SpotifySong | None = None, resume: bool = True):
     """Play or pause the currently playing song."""
     sp = get_spotify_client()
     playback = sp.current_playback()
+    if playback is None:
+        raise NoActiveDeviceFoundError("Found no active device. Play a song from the device you want to play MOSH.")
     if playback["is_playing"]:
         sp.pause_playback()
     elif resume:

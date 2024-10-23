@@ -48,6 +48,8 @@ class MoshGame:
 
     def get_new_song(self) -> SpotifySong:
         """Call the spotify API to get a new song."""
+        logger.debug("New song gets called")
+
         if len(self.upcoming_recommended_songs) == 0:
             self._fill_upcoming_songs()
         new_song = self.upcoming_recommended_songs.pop(0)

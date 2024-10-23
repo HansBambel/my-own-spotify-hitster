@@ -6,7 +6,7 @@ import my_own_spotify_hitster.components.draganddrop as dnd
 from my_own_spotify_hitster.components.draganddrop import SortableColumn, SortableRow
 from my_own_spotify_hitster.components.game_state import MoshGame
 from my_own_spotify_hitster.config import ROOT_DIR
-from my_own_spotify_hitster.spotify_functions import SpotifySong, play_pause
+from my_own_spotify_hitster.spotify_functions import NoActiveDeviceFoundError, SpotifySong, play_pause
 
 sizing_str = "self-center items-center justify-center w-1/2"
 
@@ -37,9 +37,21 @@ def prepare_for_new_song(game: MoshGame, switch) -> None:
     logger.debug(f"Old song: {game.current_song}")
     game.get_new_song()
     logger.debug(f"New song: {game.current_song}")
-    draw_current_card.refresh()
+    # TODO here the redraw happens with the old song
+    draw_current_card.refresh(game.current_song)
     switch.set_value(False)
-    play_pause(resume=False)
+    try:
+        play_pause(resume=False)
+    except NoActiveDeviceFoundError as e:
+        ui.notify(e)
+
+
+def reveal_conceal_song(game: MoshGame, switch: ui.switch) -> None:
+    """Reveal or conceal the song depending on the switch."""
+    if game.current_song is None:
+        return
+    game.current_song.reveal = switch.value
+    draw_current_card.refresh(game.current_song)
 
 
 def draw_gameboard(game: MoshGame) -> None:
@@ -52,9 +64,8 @@ def draw_gameboard(game: MoshGame) -> None:
                 with ui.column():
                     new_song_button = ui.button(text="New song")
 
-                    # TODO: this might have side-effects
-                    reveal_switch = ui.switch(text="Reveal", on_change=draw_current_card.refresh).bind_value_to(
-                        game.current_song, "reveal"
+                    reveal_switch = ui.switch(
+                        text="Reveal", on_change=lambda enabled: reveal_conceal_song(game, enabled)
                     )
                     new_song_button.on("click", lambda: prepare_for_new_song(game, reveal_switch))
                 draw_current_card(game.current_song)

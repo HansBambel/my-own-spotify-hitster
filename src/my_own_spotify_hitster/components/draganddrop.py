@@ -17,6 +17,7 @@ class Card(ui.card):
             if item.reveal:
                 ui.label(f"Title:\n{item.title}")
                 ui.label(f"Artist:\n{item.artist}")
+                ui.label(f"Album:\n{item.album}")
                 ui.label(f"Release year:\n{item.release_year}")
             else:
                 ui.label("?")
