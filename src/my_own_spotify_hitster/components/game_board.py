@@ -37,7 +37,6 @@ def prepare_for_new_song(game: MoshGame, switch) -> None:
     logger.debug(f"Old song: {game.current_song}")
     game.get_new_song()
     logger.debug(f"New song: {game.current_song}")
-    # TODO here the redraw happens with the old song
     draw_current_card.refresh(game.current_song)
     switch.set_value(False)
     try:

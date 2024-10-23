@@ -10,7 +10,8 @@ class Settings(BaseSettings):
     CLIENT_ID: str
     CLIENT_SECRET: str
     REDIRECT_URI: str = "http://localhost:8000"
-    LOG_LEVEL: str = "DEBUG"
+    DEBUG: bool = False
+    LOG_LEVEL: str = "DEBUG" if DEBUG else "WARNING"
 
 
 ROOT_DIR = Path(__file__).resolve().parent.parent
@@ -19,5 +20,7 @@ settings = Settings(_env_file=ROOT_DIR.parent / ".env")  # type: ignore
 
 logging.basicConfig()
 logging.getLogger().setLevel(settings.LOG_LEVEL)
-logging.getLogger("urllib3").setLevel(logging.WARNING)
-logging.getLogger("spotipy").setLevel(logging.WARNING)
+
+if settings.DEBUG:
+    logging.getLogger("urllib3").setLevel(logging.WARNING)
+    logging.getLogger("spotipy").setLevel(logging.WARNING)
