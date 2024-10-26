@@ -84,8 +84,12 @@ def draw_gameboard(game: MoshGame) -> None:
             # The board game
             ui.separator()
             for i in range(game.number_players):
-                with ui.column().classes("self-center items-center"):
-                    ui.label(f"Player {i + 1}").classes("text-bold text-xl ml-1 self-center")
-                    SortableRow(group="test")
-                # dnd.Row(f"Player {i + 1}", wrap=False, align_items="center", on_drop=notify).classes(sizing_str)
-                # ui.separator()
+                with ui.skeleton(bordered=True, animation="none"):
+                    with ui.column().classes("self-center items-center"):
+                        ui.label(f"Player {i + 1}").classes("text-bold text-xl ml-1 self-center")
+                        with ui.skeleton(bordered=True, animation="none"):
+                            SortableRow(group="test")
+
+    # TODO put this on the right side
+    with SortableColumn(group="test"):
+        ui.label("Wrong guesses").classes("text-bold text-xl ml-1 self.center")
