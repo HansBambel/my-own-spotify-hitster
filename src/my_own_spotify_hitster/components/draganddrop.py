@@ -1,6 +1,7 @@
 from collections.abc import Callable
 
 from nicegui import ui
+from nicegui.awaitable_response import AwaitableResponse
 
 from my_own_spotify_hitster.config import ROOT_DIR
 from my_own_spotify_hitster.spotify_functions import SpotifySong
@@ -43,7 +44,7 @@ class SortableElement(ui.element, component=ROOT_DIR / "my_own_spotify_hitster" 
         """Make the element sortable."""
         self.run_method("makeSortable")
 
-    def getitems(self) -> None:
+    def getitems(self) -> AwaitableResponse:
         """Get the items in the element."""
         return self.run_method("getitems")
 

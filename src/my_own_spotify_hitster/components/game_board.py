@@ -5,7 +5,7 @@ from nicegui import ui
 import my_own_spotify_hitster.components.draganddrop as dnd
 from my_own_spotify_hitster.components.draganddrop import SortableColumn, SortableRow
 from my_own_spotify_hitster.components.game_state import MoshGame
-from my_own_spotify_hitster.config import ROOT_DIR
+from my_own_spotify_hitster.config import ROOT_DIR, settings
 from my_own_spotify_hitster.spotify_functions import NoActiveDeviceFoundError, SpotifySong, play_pause
 
 sizing_str = "self-center items-center justify-center w-1/2"
@@ -56,6 +56,11 @@ def reveal_conceal_song(game: MoshGame, switch: ui.switch) -> None:
 def draw_gameboard(game: MoshGame) -> None:
     """Draw the game board."""
     ui.label("Play Hitster with your own spotify").classes("text-4xl self-center")
+
+    if settings.DEBUG:
+        ui.label(f"Songs left:{len(game.upcoming_recommended_songs)}").bind_text_from(
+            game, "upcoming_recommended_songs", backward=lambda x: f"Songs left in recommender: {len(x)}"
+        ).classes("text-m self-center")
 
     with ui.splitter(horizontal=True).classes(sizing_str) as splitter:
         with splitter.before:

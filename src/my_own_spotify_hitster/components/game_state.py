@@ -29,13 +29,21 @@ class MoshGame:
 
     def __init__(self, number_players: int = 2) -> None:
         """Initialize MOSH game state."""
+        logger.debug(f"Creating MOSH game state with {number_players} players.")
         self.number_players = number_players
+        self.past_songs = []
+        self.recommendations_based_on = []
+        self.upcoming_recommended_songs = []
 
+    def start_game(self) -> None:
+        """Fill game state with songs."""
+        logger.debug("Start game -> filling songs")
         self.recommendations_based_on = get_songs_from_saved_playlist()
         self._fill_upcoming_songs()
         self.past_songs = [self.upcoming_recommended_songs.pop(0)]
 
     def _fill_upcoming_songs(self):
+        logger.debug("Filling upcoming songs.")
         upcoming_recommended_songs_raw = get_recommendations(self.recommendations_based_on)
         self.upcoming_recommended_songs = [
             from_recommendation_to_spotify_song(song) for song in upcoming_recommended_songs_raw
@@ -54,4 +62,6 @@ class MoshGame:
             self._fill_upcoming_songs()
         new_song = self.upcoming_recommended_songs.pop(0)
         self.past_songs.append(new_song)
+        logger.debug(f"Songs left: {len(self.upcoming_recommended_songs)}")
+        logger.debug(f"Past songs: {self.past_songs}")
         return new_song
