@@ -76,7 +76,7 @@ def get_recommendations(based_on: list) -> list:
     """Get (popular) recommendations based on the given list (in spotify track data model)."""
     sp = get_spotify_client()
     songs = [song["track"]["id"] for song in based_on]
-    recommendations = sp.recommendations(seed_tracks=songs, min_popularity=69)
+    recommendations = sp.recommendations(seed_tracks=songs, limit=10, min_popularity=69)
     return recommendations["tracks"]
 
 

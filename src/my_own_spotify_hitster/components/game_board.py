@@ -8,8 +8,6 @@ from my_own_spotify_hitster.components.game_state import MoshGame
 from my_own_spotify_hitster.config import ROOT_DIR, settings
 from my_own_spotify_hitster.spotify_functions import NoActiveDeviceFoundError, SpotifySong, play_pause
 
-sizing_str = "self-center items-center justify-center w-1/2"
-
 logger = logging.getLogger(__name__)
 
 
@@ -62,35 +60,38 @@ def draw_gameboard(game: MoshGame) -> None:
             game, "upcoming_recommended_songs", backward=lambda x: f"Songs left in recommender: {len(x)}"
         ).classes("text-m self-center")
 
-    with ui.splitter(horizontal=True).classes(sizing_str) as splitter:
-        with splitter.before:
-            with ui.grid(columns=3).classes(sizing_str):
-                with ui.column():
-                    new_song_button = ui.button(text="New song")
+    with ui.column().classes("w-full items-center"):
+        with ui.splitter(horizontal=True).classes("w-3/4 flex-1") as splitter:
+            with splitter.before:
+                # The new song etc
+                with ui.grid(columns=3).classes("w-full self-center justify-items-center"):
+                    with ui.column():
+                        new_song_button = ui.button(text="New song")
 
-                    reveal_switch = ui.switch(
-                        text="Reveal", on_change=lambda enabled: reveal_conceal_song(game, enabled)
-                    )
-                    new_song_button.on("click", lambda: prepare_for_new_song(game, reveal_switch))
-                draw_current_card(game.current_song)
+                        reveal_switch = ui.switch(
+                            text="Reveal", on_change=lambda enabled: reveal_conceal_song(game, enabled)
+                        )
+                        new_song_button.on("click", lambda: prepare_for_new_song(game, reveal_switch))
+                    draw_current_card(game.current_song)
 
-                with ui.column():
-                    # Toggle for play/pause
-                    with ui.button(on_click=lambda: (play_pause(game.current_song))):
-                        ui.label("Play/Pause")
-                        ui.image(ROOT_DIR / "my_own_spotify_hitster" / "play_pause.svg")
+                    with ui.column().classes("mb-6"):
+                        # Toggle for play/pause
+                        with ui.button(on_click=lambda: (play_pause(game.current_song))):
+                            ui.label("Play/Pause")
+                            ui.image(ROOT_DIR / "my_own_spotify_hitster" / "play_pause.svg")
 
-        with splitter.after:
-            # The board game
-            ui.separator()
-            for i in range(game.number_players):
-                with ui.skeleton(bordered=True, animation="none"):
-                    with ui.column().classes("self-center items-center"):
-                        ui.label(f"Player {i + 1}").classes("text-bold text-xl ml-1 self-center")
-                        with ui.skeleton(bordered=True, animation="none"):
-                            SortableRow(group="test")
+            with splitter.after:
+                # The board game
+                ui.separator()
+                for i in range(game.number_players):
+                    with ui.skeleton(bordered=True, animation="none").classes("self-center items-center"):
+                        with ui.column().classes("self-center items-center"):
+                            ui.label(f"Player {i + 1}").classes("text-bold text-xl ml-1 self-center")
+                            with ui.skeleton(bordered=True, animation="none"):
+                                SortableRow(group="test")
 
-    # TODO put this on the right side
-    ui.label("Wrong guesses").classes("text-bold text-xl ml-1 self.center")
-    with ui.skeleton(bordered=True, animation="none").classes("object-right"):
-        SortableColumn(group="test")
+        # TODO put this on the right side
+        with ui.element().classes("w-1/4"):
+            ui.label("Wrong guesses").classes("text-bold text-xl justify-self-center")
+            with ui.skeleton(bordered=True, animation="none").classes("object-right"):
+                SortableRow(group="test")
