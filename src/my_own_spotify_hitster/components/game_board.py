@@ -91,5 +91,6 @@ def draw_gameboard(game: MoshGame) -> None:
                             SortableRow(group="test")
 
     # TODO put this on the right side
-    with SortableColumn(group="test"):
-        ui.label("Wrong guesses").classes("text-bold text-xl ml-1 self.center")
+    ui.label("Wrong guesses").classes("text-bold text-xl ml-1 self.center")
+    with ui.skeleton(bordered=True, animation="none").classes("object-right"):
+        SortableColumn(group="test")

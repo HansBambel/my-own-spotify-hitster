@@ -44,6 +44,7 @@ class MoshGame:
 
     def _fill_upcoming_songs(self):
         logger.debug("Filling upcoming songs.")
+        self.recommendations_based_on = get_songs_from_saved_playlist()
         upcoming_recommended_songs_raw = get_recommendations(self.recommendations_based_on)
         self.upcoming_recommended_songs = [
             from_recommendation_to_spotify_song(song) for song in upcoming_recommended_songs_raw

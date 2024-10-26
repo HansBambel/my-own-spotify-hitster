@@ -16,10 +16,11 @@ class Card(ui.card):
         self.item = item
         with self.props("draggable").classes("w-full cursor-pointer bg-grey-1"):
             if item.reveal:
-                ui.label(f"Title:\n{item.title}")
-                ui.label(f"Artist:\n{item.artist}")
-                ui.label(f"Album:\n{item.album}")
-                ui.label(f"Release year:\n{item.release_year}")
+                ui.label(f"{item.artist}")
+                # ui.label("-")
+                ui.label(f"{item.title}")
+                # ui.label(f"Album: \n{item.album}")
+                ui.label(f"{item.release_year}").classes("text-xl font-bold")
             else:
                 ui.label("?")
 
