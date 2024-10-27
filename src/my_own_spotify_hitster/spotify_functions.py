@@ -29,6 +29,10 @@ class SpotifySong:
     uri: str | None = None
     reveal: bool = False
 
+    def __eq__(self, other):
+        """Equality check only takes title and artist into consideration."""
+        return (self.title == other.title) and (self.artist == other.artist)
+
 
 @lru_cache(maxsize=1)
 def get_spotify_client():
@@ -60,8 +64,8 @@ def play_pause(song: SpotifySong | None = None, resume: bool = True):
             sp.start_playback()
 
 
-def get_songs_from_saved_playlist(amount=5) -> list:
-    """Get the current users saved playlist and get `amount` songs from it."""
+def get_songs_from_saved_playlist(amount=5) -> list[dict]:
+    """Get the current users saved playlist and get `amount` songs from it. Returns list of spotify songs."""
     sp = get_spotify_client()
 
     liked_playlist = sp.current_user_saved_tracks()
@@ -72,7 +76,7 @@ def get_songs_from_saved_playlist(amount=5) -> list:
     return songs
 
 
-def get_recommendations(based_on: list) -> list:
+def get_recommendations(based_on: list[dict]) -> list[dict]:
     """Get (popular) recommendations based on the given list (in spotify track data model)."""
     sp = get_spotify_client()
     songs = [song["track"]["id"] for song in based_on]
