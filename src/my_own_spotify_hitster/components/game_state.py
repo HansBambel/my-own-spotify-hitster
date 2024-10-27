@@ -43,12 +43,20 @@ class MoshGame:
         self.past_songs = [self.upcoming_recommended_songs.pop(0)]
 
     def _fill_upcoming_songs(self):
+        """
+        Call the spotify API to get new upcoming songs. Uses new recommendations for the new batch.
+        Filters duplicates.
+        """
         logger.debug("Filling upcoming songs.")
         self.recommendations_based_on = get_songs_from_saved_playlist()
         upcoming_recommended_songs_raw = get_recommendations(self.recommendations_based_on)
-        self.upcoming_recommended_songs = [
-            from_recommendation_to_spotify_song(song) for song in upcoming_recommended_songs_raw
-        ]
+        new_recommendations = [from_recommendation_to_spotify_song(song) for song in upcoming_recommended_songs_raw]
+        logger.debug(f"Found {len(new_recommendations)} new recommendations.")
+        self.upcoming_recommended_songs = [song for song in new_recommendations if song not in self.past_songs]
+        logger.debug(f"Found {len(new_recommendations)-len(self.upcoming_recommended_songs)} duplicates.")
+        if len(self.upcoming_recommended_songs) == 0:
+            # All songs are duplicates -> call _fill_upcoming songs again
+            self._fill_upcoming_songs()
 
     @property
     def current_song(self) -> SpotifySong | None:
@@ -56,7 +64,7 @@ class MoshGame:
         return self.past_songs[-1] if len(self.past_songs) > 0 else None
 
     def get_new_song(self) -> SpotifySong:
-        """Call the spotify API to get a new song."""
+        """Get a new song from the upcoming recommended songs."""
         logger.debug("New song gets called")
 
         if len(self.upcoming_recommended_songs) == 0:

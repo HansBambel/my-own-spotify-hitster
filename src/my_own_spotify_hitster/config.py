@@ -10,7 +10,7 @@ class Settings(BaseSettings):
     CLIENT_ID: str
     CLIENT_SECRET: str
     REDIRECT_URI: str = "http://localhost:8000"
-    DEBUG: bool = True
+    DEBUG: bool = False
     LOG_LEVEL: str = "DEBUG" if DEBUG else "WARNING"
 
 
