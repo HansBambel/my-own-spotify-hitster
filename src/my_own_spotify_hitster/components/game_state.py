@@ -1,5 +1,7 @@
 import logging
 
+from nicegui import binding
+
 from my_own_spotify_hitster.spotify_functions import (
     SpotifySong,
     from_recommendation_to_spotify_song,
@@ -21,7 +23,7 @@ default_song = SpotifySong(
 class MoshGame:
     """Contains the game state of a round of My Own Spotify Hitster."""
 
-    number_players: int
+    number_players: binding.BindableProperty
     round: int = 1
     past_songs: list[SpotifySong]
     recommendations_based_on: list
