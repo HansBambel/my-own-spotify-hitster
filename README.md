@@ -1,14 +1,12 @@
 # My Own Spotify Hitster (or MOSH)
+![Interface](example_interface.png)
 
-This is supposed to be a project to play Hitster with your own Spotify account or with a playlist.
+Play Hitster with your own Spotify account based on your liked songs. (Future feature: based on a playlist).
 
-Things that need to be done:
-1. Log in to Spotify
-2. Get Songs
-    1. From a given Playlist
-    2. From recommendations
-3. Have an interface
-   4. Each player should have their songs displayed
+Play alone or with friends.
+
+This is still a work in progress. More features will (probably) be added.
+The UI is also (clearly) a work in progress.
 
 # Run the app
 1. Install dependencies:
