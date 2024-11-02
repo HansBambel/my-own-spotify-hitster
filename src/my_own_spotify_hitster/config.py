@@ -11,7 +11,7 @@ class Settings(BaseSettings):
     CLIENT_SECRET: str
     REDIRECT_URI: str = "http://localhost:8000"
     DEBUG: bool = False
-    LOG_LEVEL: str = "DEBUG" if DEBUG else "WARNING"
+    LOG_LEVEL: str = "WARNING"
 
 
 ROOT_DIR = Path(__file__).resolve().parent.parent

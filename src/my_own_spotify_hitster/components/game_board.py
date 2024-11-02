@@ -88,7 +88,9 @@ def draw_gameboard(game: MoshGame) -> None:
                 for i in range(game.number_players):
                     with ui.skeleton(bordered=True, animation="none").classes("self-center items-center"):
                         with ui.column().classes("self-center items-center"):
-                            ui.label(f"Player {i + 1}").classes("text-bold text-xl ml-1 self-center")
+                            ui.label(game.player_names.get(f"Player {i + 1}", f"Player {i + 1}")).classes(
+                                "text-bold text-xl ml-1 self-center"
+                            )
                             with ui.skeleton(bordered=True, animation="none"):
                                 SortableRow(group="test")
 
