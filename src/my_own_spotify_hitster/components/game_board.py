@@ -92,7 +92,11 @@ def draw_gameboard(game: MoshGame) -> None:
                                 "text-bold text-xl ml-1 self-center"
                             )
                             with ui.skeleton(bordered=True, animation="none"):
-                                SortableRow(group="test")
+                                with SortableRow(group="test"):
+                                    if game.current_song:
+                                        game.current_song.reveal = True
+                                        dnd.Card(game.current_song)
+                                        game.get_new_song()
 
         # TODO put this on the right side
         with ui.element().classes("w-1/4"):
