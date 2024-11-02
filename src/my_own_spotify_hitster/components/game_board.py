@@ -51,6 +51,7 @@ def reveal_conceal_song(game: MoshGame, switch: ui.switch) -> None:
     draw_current_card.refresh(game.current_song)
 
 
+@ui.refreshable
 def draw_gameboard(game: MoshGame) -> None:
     """Draw the game board."""
     ui.label("Play Hitster with your own spotify").classes("text-4xl self-center")
@@ -83,6 +84,7 @@ def draw_gameboard(game: MoshGame) -> None:
             with splitter.after:
                 # The board game
                 ui.separator()
+                logger.debug(f"Number of players: {game.number_players}")
                 for i in range(game.number_players):
                     with ui.skeleton(bordered=True, animation="none").classes("self-center items-center"):
                         with ui.column().classes("self-center items-center"):

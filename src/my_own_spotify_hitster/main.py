@@ -12,6 +12,7 @@ with ui.element().classes("w-full justify-start items-center"):
         with ui.tab_panel("Config"):
             # TODO for each player set a name
             players_number = ui.number(placeholder="2", min=1)
+            players_number.bind_value(game, "number_players", forward=int)
             ui.button("New game", on_click=lambda: start_game(game))
             # TODO implement multiple based on approaches
             based_on = ui.switch("Based on liked songs")
@@ -27,6 +28,7 @@ with ui.element().classes("w-full justify-start items-center"):
 def start_game(game: MoshGame):
     """Trigger starting the game and switch tab to the game board."""
     game.start_game()
+    draw_gameboard.refresh()
     panels.set_value("Game")
 
 
