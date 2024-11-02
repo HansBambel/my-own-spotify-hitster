@@ -3,8 +3,8 @@ from collections.abc import Callable
 from nicegui import ui
 from nicegui.awaitable_response import AwaitableResponse
 
-from my_own_spotify_hitster.config import ROOT_DIR
-from my_own_spotify_hitster.spotify_functions import SpotifySong
+from config import ROOT_DIR
+from spotify_functions import SpotifySong
 
 
 class Card(ui.card):
@@ -25,7 +25,7 @@ class Card(ui.card):
                 ui.label("?")
 
 
-class SortableElement(ui.element, component=ROOT_DIR / "my_own_spotify_hitster" / "resources" / "sortable_element.js"):  # type: ignore
+class SortableElement(ui.element, component=ROOT_DIR / "resources" / "sortable_element.js"):  # type: ignore
     """Sortable Row element."""
 
     def __init__(self, *args, group: str, on_change: Callable | None = None, **kwargs) -> None:

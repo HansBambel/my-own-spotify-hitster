@@ -3,34 +3,23 @@ name = "my-own-spotify-hitster"
 version = "0.1.0"
 description = "Add your description here"
 authors = [
-    { name = "Kevin", email = "hans-bambel@gmx.net" }
-]
-dependencies = [
-    "spotipy>=2.24.0",
-    "pydantic-settings>=2.6.0",
-    "nicegui>=2.4.0",
+    { name = "Kevin Trebing", email = "hans-bambel@gmx.net" }
 ]
 readme = "README.md"
-requires-python = ">= 3.10"
-
-[build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
-
-[tool.rye]
-managed = false
-dev-dependencies = [
-    "ruff>=0.6.3",
-    "mypy>=1.11.2",
-    "pytest>=8.3.2",
-    "pre-commit>=3.8.0",
+requires-python = ">=3.12"
+dependencies = [
+    "nicegui>=2.5.0",
+    "pydantic-settings>=2.6.1",
+    "spotipy>=2.24.0",
 ]
 
-[tool.hatch.metadata]
-allow-direct-references = true
-
-[tool.hatch.build.targets.wheel]
-packages = ["src/my_own_spotify_hitster"]
+[dependency-groups]
+dev = [
+    "mypy>=1.13.0",
+    "pre-commit>=4.0.1",
+    "pytest>=8.3.3",
+    "ruff>=0.7.2",
+]
 
 [tool.ruff]
 line-length = 120

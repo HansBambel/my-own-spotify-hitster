@@ -2,7 +2,7 @@ import logging
 
 from nicegui import binding
 
-from my_own_spotify_hitster.spotify_functions import (
+from spotify_functions import (
     SpotifySong,
     from_recommendation_to_spotify_song,
     get_recommendations,

@@ -7,7 +7,7 @@ from functools import lru_cache
 import spotipy
 from spotipy import SpotifyOAuth
 
-from my_own_spotify_hitster.config import settings
+from config import settings
 
 logger = logging.getLogger(__name__)
 

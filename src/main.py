@@ -1,9 +1,9 @@
 import logging
 
-from components.game_state import MoshGame
 from nicegui import ui
 
-from my_own_spotify_hitster.components.game_board import draw_gameboard
+from components.game_board import draw_gameboard
+from components.game_state import MoshGame
 
 logger = logging.getLogger(__name__)
 

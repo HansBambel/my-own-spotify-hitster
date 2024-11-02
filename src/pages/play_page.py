@@ -3,7 +3,7 @@ import streamlit as st
 from spotipy.exceptions import SpotifyException
 from spotipy.oauth2 import SpotifyOAuth
 
-from my_own_spotify_hitster.config import settings
+from config import settings
 
 for k, v in st.session_state.items():
     st.session_state[k] = v

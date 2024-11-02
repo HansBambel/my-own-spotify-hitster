@@ -14,7 +14,7 @@ class Settings(BaseSettings):
     LOG_LEVEL: str = "WARNING"
 
 
-ROOT_DIR = Path(__file__).resolve().parent.parent
+ROOT_DIR = Path(__file__).resolve().parent
 settings = Settings(_env_file=ROOT_DIR.parent / ".env")  # type: ignore
 
 

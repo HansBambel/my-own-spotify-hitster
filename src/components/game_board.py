@@ -2,11 +2,11 @@ import logging
 
 from nicegui import ui
 
-import my_own_spotify_hitster.components.draganddrop as dnd
-from my_own_spotify_hitster.components.draganddrop import SortableColumn, SortableRow
-from my_own_spotify_hitster.components.game_state import MoshGame
-from my_own_spotify_hitster.config import ROOT_DIR, settings
-from my_own_spotify_hitster.spotify_functions import NoActiveDeviceFoundError, SpotifySong, play_pause
+import components.draganddrop as dnd
+from components.draganddrop import SortableColumn, SortableRow
+from components.game_state import MoshGame
+from config import ROOT_DIR, settings
+from spotify_functions import NoActiveDeviceFoundError, SpotifySong, play_pause
 
 logger = logging.getLogger(__name__)
 
@@ -79,7 +79,7 @@ def draw_gameboard(game: MoshGame) -> None:
                         # Toggle for play/pause
                         with ui.button(on_click=lambda: (play_pause(game.current_song))):
                             ui.label("Play/Pause")
-                            ui.image(ROOT_DIR / "my_own_spotify_hitster" / "play_pause.svg")
+                            ui.image(ROOT_DIR / "play_pause.svg")
 
             with splitter.after:
                 # The board game

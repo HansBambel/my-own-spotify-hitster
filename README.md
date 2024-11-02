@@ -9,12 +9,13 @@ This is still a work in progress. More features will (probably) be added.
 The UI is also (clearly) a work in progress.
 
 # Run the app
+0. Install [uv](https://docs.astral.sh/uv/getting-started/installation/)
 1. Install dependencies:
 ```shell
-rye sync
+uv sync
 ```
 
 2. Start app:
 ```shell
-python src\my_own_spotify_hitster\main.py
+python src\main.py
 ```
