@@ -24,6 +24,7 @@ class MoshGame:
     """Contains the game state of a round of My Own Spotify Hitster."""
 
     number_players: binding.BindableProperty
+    player_names: dict[str, str]
     round: int = 1
     past_songs: list[SpotifySong]
     recommendations_based_on: list
@@ -33,6 +34,7 @@ class MoshGame:
         """Initialize MOSH game state."""
         logger.debug(f"Creating MOSH game state with {number_players} players.")
         self.number_players = number_players
+        self.player_names = {f"Player {i+1}": f"Player {i+1}" for i in range(number_players)}
         self.past_songs = []
         self.recommendations_based_on = []
         self.upcoming_recommended_songs = []
