@@ -1,4 +1,8 @@
 # My Own Spotify Hitster (or MOSH)
+<p align="center">
+<img src="image.png" width="35%">
+</p>
+
 ![Interface](example_interface.png)
 
 Play Hitster with your own Spotify account based on your liked songs. (Future feature: based on a playlist).
