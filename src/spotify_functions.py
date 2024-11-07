@@ -5,7 +5,7 @@ from dataclasses import dataclass
 from functools import lru_cache
 
 import spotipy
-from spotipy import SpotifyOAuth
+from spotipy import Spotify, SpotifyOAuth
 
 from config import settings
 
@@ -35,7 +35,7 @@ class SpotifySong:
 
 
 @lru_cache(maxsize=1)
-def get_spotify_client():
+def get_spotify_client() -> Spotify:
     """Get client from Spotify API to read library and modify playback."""
     sp = spotipy.Spotify(
         auth_manager=SpotifyOAuth(
@@ -48,7 +48,13 @@ def get_spotify_client():
     return sp
 
 
-def play_pause(song: SpotifySong | None = None, resume: bool = True):
+def force_play(song: SpotifySong) -> None:
+    """Play the song."""
+    sp = get_spotify_client()
+    sp.start_playback(uris=[song.uri])
+
+
+def play_pause(song: SpotifySong | None = None, resume: bool = True) -> None:
     """Play or pause the currently playing song."""
     sp = get_spotify_client()
     playback = sp.current_playback()
@@ -58,7 +64,7 @@ def play_pause(song: SpotifySong | None = None, resume: bool = True):
         sp.pause_playback()
     elif resume:
         if song and song.uri:
-            sp.start_playback(uris=[song.uri])
+            force_play(song)
         else:
             logger.warning(f"Error trying to play song: {song}")
             sp.start_playback()

@@ -6,7 +6,7 @@ import components.draganddrop as dnd
 from components.draganddrop import SortableColumn, SortableRow
 from components.game_state import MoshGame
 from config import ROOT_DIR, settings
-from spotify_functions import NoActiveDeviceFoundError, SpotifySong, play_pause
+from spotify_functions import NoActiveDeviceFoundError, SpotifySong, force_play, play_pause
 
 logger = logging.getLogger(__name__)
 
@@ -33,12 +33,15 @@ def prepare_for_new_song(game: MoshGame, switch) -> None:
     """Get a new song, draw a new card and disable the reveal switch."""
     logger.debug("Prepare for new song")
     logger.debug(f"Old song: {game.current_song}")
+    if len(game.upcoming_recommended_songs) == 0:
+        ui.notify("Getting new songs, please wait", position="top")
     game.get_new_song()
     logger.debug(f"New song: {game.current_song}")
     draw_current_card.refresh(game.current_song)
     switch.set_value(False)
     try:
-        play_pause(resume=False)
+        # play_pause(resume=False)
+        force_play(song=game.current_song)
     except NoActiveDeviceFoundError as e:
         ui.notify(e)
 

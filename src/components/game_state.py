@@ -27,7 +27,7 @@ class MoshGame:
     player_names: dict[str, str]
     round: int = 1
     past_songs: list[SpotifySong]
-    recommendations_based_on: list
+    recommendations_based_on: list[dict]
     upcoming_recommended_songs: list[SpotifySong]
 
     def __init__(self, number_players: int = 2) -> None:
@@ -42,7 +42,6 @@ class MoshGame:
     def start_game(self) -> None:
         """Fill game state with songs."""
         logger.debug("Start game -> filling songs")
-        self.recommendations_based_on = get_songs_from_saved_playlist()
         self._fill_upcoming_songs()
         self.past_songs = [self.upcoming_recommended_songs.pop(0)]
 
