@@ -74,6 +74,7 @@ def get_songs_from_saved_playlist(amount=5) -> list[dict]:
     """Get the current users saved playlist and get `amount` songs from it. Returns list of spotify songs."""
     sp = get_spotify_client()
 
+    logger.debug("Getting songs from saved tracks.")
     liked_playlist = sp.current_user_saved_tracks()
     number_of_songs = liked_playlist["total"]
     # Get random songs from that list
@@ -82,11 +83,24 @@ def get_songs_from_saved_playlist(amount=5) -> list[dict]:
     return songs
 
 
-def get_recommendations(based_on: list[dict]) -> list[dict]:
+def get_songs_from_custom_playlist(playlist_url: str, amount=5) -> list[dict]:
+    """Get 5 songs from the given playlist and get `amount` songs from it. Returns list of spotify songs."""
+    sp = get_spotify_client()
+
+    logger.debug(f"Getting songs from custom playlist: {playlist_url}")
+    playlist = sp.playlist(playlist_url)
+    logger.debug(f"Playlist name: {playlist['name']}")
+    number_of_songs = playlist["tracks"]["total"]
+    song_ids = random.sample(range(number_of_songs), k=amount)
+    songs = [sp.playlist_items(playlist_url, limit=1, offset=offset)["items"][0] for offset in song_ids]
+    return songs
+
+
+def get_recommendations(based_on: list[dict], min_popularity: int = 69) -> list[dict]:
     """Get (popular) recommendations based on the given list (in spotify track data model)."""
     sp = get_spotify_client()
     songs = [song["track"]["id"] for song in based_on]
-    recommendations = sp.recommendations(seed_tracks=songs, limit=10, min_popularity=69)
+    recommendations = sp.recommendations(seed_tracks=songs, limit=10, min_popularity=min_popularity)
     return recommendations["tracks"]
 
 
@@ -108,10 +122,12 @@ if __name__ == "__main__":
     # songs = get_songs_from_saved_playlist()
     # recommendations = get_recommendations(songs)
 
-    song = {
-        "album": {"name": "<AlbumName>", "release_date": "2024-07-23"},
-        "artists": [{"name": "<NAME>"}],
-        "name": "<SongName>",
-        "uri": "<some-uri>",
-    }
-    print(from_recommendation_to_spotify_song(song))
+    get_songs_from_custom_playlist("https://open.spotify.com/playlist/2XyhXRIemHuTDwk79oHvoU?si=f06ce5903bce4f27")
+
+    # song = {
+    #     "album": {"name": "<AlbumName>", "release_date": "2024-07-23"},
+    #     "artists": [{"name": "<NAME>"}],
+    #     "name": "<SongName>",
+    #     "uri": "<some-uri>",
+    # }
+    # print(from_recommendation_to_spotify_song(song))
