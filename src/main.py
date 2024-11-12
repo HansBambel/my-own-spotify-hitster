@@ -31,10 +31,11 @@ with ui.element().classes("w-full justify-start items-center"):
             players_number.on("change", player_names_input.refresh)
 
             ui.button("New game", on_click=lambda: start_game(game))
-            # TODO implement multiple based on approaches
-            based_on = ui.switch("Based on liked songs")
-            based_on.set_value(True)
-            based_on.disable()
+            # implement multiple based on approaches
+            based_on = ui.radio(["Based on liked songs", "Playlist"], value="Based on liked songs")
+            with ui.row().bind_visibility_from(based_on, "value", value="Playlist"):
+                ui.input(label="Playlist-URL").bind_value_to(game, "custom_playlist")
+
         with ui.tab_panel("Game"):
             if game is not None:
                 draw_gameboard(game)

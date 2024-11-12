@@ -6,6 +6,7 @@ from spotify_functions import (
     SpotifySong,
     from_recommendation_to_spotify_song,
     get_recommendations,
+    get_songs_from_custom_playlist,
     get_songs_from_saved_playlist,
 )
 
@@ -27,15 +28,19 @@ class MoshGame:
     player_names: dict[str, str]
     round: int = 1
     past_songs: list[SpotifySong]
+
+    custom_playlist: binding.BindableProperty
     recommendations_based_on: list[dict]
     upcoming_recommended_songs: list[SpotifySong]
+    min_popularity: int = 69
 
-    def __init__(self, number_players: int = 2) -> None:
+    def __init__(self, number_players: int = 2, custom_playlist: str | None = None) -> None:
         """Initialize MOSH game state."""
         logger.debug(f"Creating MOSH game state with {number_players} players.")
         self.number_players = number_players
         self.player_names = {f"Player {i+1}": f"Player {i+1}" for i in range(number_players)}
         self.past_songs = []
+        self.custom_playlist = custom_playlist
         self.recommendations_based_on = []
         self.upcoming_recommended_songs = []
 
@@ -51,8 +56,14 @@ class MoshGame:
         Filters duplicates.
         """
         logger.debug("Filling upcoming songs.")
-        self.recommendations_based_on = get_songs_from_saved_playlist()
-        upcoming_recommended_songs_raw = get_recommendations(self.recommendations_based_on)
+        if self.custom_playlist:
+            self.recommendations_based_on = get_songs_from_custom_playlist(self.custom_playlist)
+        else:
+            self.recommendations_based_on = get_songs_from_saved_playlist()
+
+        upcoming_recommended_songs_raw = get_recommendations(
+            self.recommendations_based_on, min_popularity=self.min_popularity
+        )
         new_recommendations = [from_recommendation_to_spotify_song(song) for song in upcoming_recommended_songs_raw]
         logger.debug(f"Found {len(new_recommendations)} new recommendations.")
         self.upcoming_recommended_songs = [song for song in new_recommendations if song not in self.past_songs]
