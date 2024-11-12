@@ -25,16 +25,17 @@ with ui.element().classes("w-full justify-start items-center"):
     with ui.tab_panels(tabs) as panels:
         game: MoshGame = MoshGame()
         with ui.tab_panel("Config"):
-            players_number = ui.number(placeholder="2", min=1)
-            players_number.bind_value(game, "number_players", forward=int)
-            player_names_input(game)
-            players_number.on("change", player_names_input.refresh)
+            with ui.column().classes("w-full items-center"):
+                players_number = ui.number(placeholder="2", min=1)
+                players_number.bind_value(game, "number_players", forward=int)
+                player_names_input(game)
+                players_number.on("change", player_names_input.refresh)
 
-            ui.button("New game", on_click=lambda: start_game(game))
-            # implement multiple based on approaches
-            based_on = ui.radio(["Based on liked songs", "Playlist"], value="Based on liked songs")
-            with ui.row().bind_visibility_from(based_on, "value", value="Playlist"):
-                ui.input(label="Playlist-URL").bind_value_to(game, "custom_playlist")
+                ui.button("New game", on_click=lambda: start_game(game))
+                # implement multiple based on approaches
+                based_on = ui.radio(["Based on liked songs", "Playlist"], value="Based on liked songs")
+                with ui.row().bind_visibility_from(based_on, "value", value="Playlist"):
+                    ui.input(label="Playlist-URL").bind_value_to(game, "custom_playlist")
 
         with ui.tab_panel("Game"):
             if game is not None:
