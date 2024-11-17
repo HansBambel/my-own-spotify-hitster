@@ -106,7 +106,8 @@ def get_recommendations(based_on: list[dict], min_popularity: int = 69) -> list[
 
 def from_recommendation_to_spotify_song(recommendation: dict) -> SpotifySong:
     """Convert from spotify data model to own Spotify Song model."""
-    release_year = re.findall(r"\d{4}", recommendation["album"]["release_date"])
+    release_str = recommendation["album"].get("release_date") or ""
+    release_year = re.findall(r"\d{4}", release_str)
     if not release_year:
         raise RuntimeError(f"Could not find release year in album: {recommendation['album']}")
     return SpotifySong(
