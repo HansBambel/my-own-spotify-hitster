@@ -4,8 +4,7 @@
 </p>
 
 ![Interface](example_interface.png)
-[!WARNING]
-Spotify removed the ability to get [recommendations](https://developer.spotify.com/documentation/web-api/reference/get-recommendations).
+> [!WARNING] Spotify removed the ability to get [recommendations](https://developer.spotify.com/documentation/web-api/reference/get-recommendations).
 This means that the app is currently not working as intended. [This](https://community.spotify.com/t5/Spotify-for-Developers/Changes-to-Web-API/td-p/6540414) is the Spotify-thread about the issue.
 
 Play Hitster with your own Spotify account based on your liked songs or a playlist.
