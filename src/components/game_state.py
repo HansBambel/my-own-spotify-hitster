@@ -61,9 +61,7 @@ class MoshGame:
         else:
             self.recommendations_based_on = get_songs_from_saved_playlist()
 
-        upcoming_recommended_songs_raw = get_recommendations(
-            self.recommendations_based_on, min_popularity=self.min_popularity
-        )
+        upcoming_recommended_songs_raw = [song["track"] for song in self.recommendations_based_on]
         new_recommendations = [from_recommendation_to_spotify_song(song) for song in upcoming_recommended_songs_raw]
         logger.debug(f"Found {len(new_recommendations)} new recommendations.")
         self.upcoming_recommended_songs = [song for song in new_recommendations if song not in self.past_songs]
