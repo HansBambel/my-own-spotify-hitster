@@ -11,6 +11,9 @@ from spotify_functions import NoActiveDeviceFoundError, SpotifySong, force_play,
 logger = logging.getLogger(__name__)
 
 
+current_card: dnd.Card | None = None
+
+
 def notify(item, location: str) -> None:
     """Notify the player about the card movement."""
     ui.notify(f"Dropped {item.title} on {location}")
@@ -31,6 +34,9 @@ def draw_current_card(song: SpotifySong | None) -> None:
 
 def prepare_for_new_song(game: MoshGame, switch) -> None:
     """Get a new song, draw a new card and disable the reveal switch."""
+    if switch.value is False:
+        ui.notify("Need to reveal card to continue")
+        return
     logger.debug("Prepare for new song")
     logger.debug(f"Old song: {game.current_song}")
     if len(game.upcoming_recommended_songs) == 0:

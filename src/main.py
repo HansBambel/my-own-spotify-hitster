@@ -35,7 +35,10 @@ with ui.element().classes("w-full justify-start items-center"):
                 # implement multiple based on approaches
                 based_on = ui.radio(["Based on liked songs", "Playlist"], value="Based on liked songs")
                 with ui.row().bind_visibility_from(based_on, "value", value="Playlist"):
-                    ui.input(label="Playlist-URL").bind_value_to(game, "custom_playlist")
+                    ui.input(
+                        label="Playlist-URL",
+                        placeholder="https://open.spotify.com/playlist/3M1Ib7CzYyy9pOWpmwlfIr?si=f65cd5c9884648b4",
+                    ).bind_value_to(game, "custom_playlist")
 
         with ui.tab_panel("Game"):
             if game is not None:
