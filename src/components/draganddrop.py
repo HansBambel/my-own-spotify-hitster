@@ -20,7 +20,7 @@ class Card(ui.card):
                 # ui.label("-")
                 ui.label(f"{item.title}")
                 # ui.label(f"Album: \n{item.album}")
-                ui.label(f"{item.release_year}").classes("text-xl font-bold")
+                ui.input(placeholder=f"{item.release_year}").classes("text-xl font-bold")
             else:
                 ui.label("?")
 
