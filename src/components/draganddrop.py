@@ -15,12 +15,18 @@ class Card(ui.card):
         super().__init__()
         self.item = item
         with self.props("draggable").classes("w-full cursor-pointer bg-grey-1"):
-            if item.reveal:
-                ui.label(f"{item.artist}")
+            self.to_display = ui.column()
+            self.update()
+
+    def update(self) -> None:
+        """Update the information on the card. Depends on reveal."""
+        with self.to_display:
+            if self.item.reveal:
+                ui.label(f"{self.item.artist}")
                 # ui.label("-")
-                ui.label(f"{item.title}")
-                # ui.label(f"Album: \n{item.album}")
-                ui.input(placeholder=f"{item.release_year}").classes("text-xl font-bold")
+                ui.label(f"{self.item.title}")
+                # ui.label(f"Album: \n{self.item.album}")
+                ui.input(placeholder=f"{self.item.release_year}").classes("text-xl font-bold")
             else:
                 ui.label("?")
 

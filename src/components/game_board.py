@@ -11,6 +11,7 @@ from spotify_functions import NoActiveDeviceFoundError, SpotifySong, force_play,
 logger = logging.getLogger(__name__)
 
 
+current_card_holder: SortableColumn | None = None
 current_card: dnd.Card | None = None
 
 
@@ -27,9 +28,9 @@ def draw_current_card(song: SpotifySong | None) -> None:
 
     logger.debug(f"Redrawing card: {song}")
 
-    with SortableColumn(group="test"):
-        ui.label("New song").classes("text-bold text-lg ml-1 self-center")
-        dnd.Card(song)
+    global current_card
+    if current_card:
+        current_card.update()
 
 
 def prepare_for_new_song(game: MoshGame, switch) -> None:
@@ -43,7 +44,13 @@ def prepare_for_new_song(game: MoshGame, switch) -> None:
         ui.notify("Getting new songs, please wait", position="top")
     game.get_new_song()
     logger.debug(f"New song: {game.current_song}")
-    draw_current_card.refresh(game.current_song)
+
+    if current_card_holder:
+        with current_card_holder:
+            ui.label("New song").classes("text-bold text-lg ml-1 self-center")
+            global current_card
+            current_card = dnd.Card(game.current_song)
+    # draw_current_card.refresh(game.current_song)
     switch.set_value(False)
     try:
         # play_pause(resume=False)
@@ -57,6 +64,7 @@ def reveal_conceal_song(game: MoshGame, switch: ui.switch) -> None:
     if game.current_song is None:
         return
     game.current_song.reveal = switch.value
+    logger.debug(f"Switched reveal to {switch.value}")
     draw_current_card.refresh(game.current_song)
 
 
@@ -82,7 +90,15 @@ def draw_gameboard(game: MoshGame) -> None:
                             text="Reveal", on_change=lambda enabled: reveal_conceal_song(game, enabled)
                         )
                         new_song_button.on("click", lambda: prepare_for_new_song(game, reveal_switch))
-                    draw_current_card(game.current_song)
+                    global current_card_holder
+                    current_card_holder = SortableColumn(group="test")
+                    with current_card_holder:
+                        logger.debug("Drawing card holder")
+                        ui.label("New song").classes("text-bold text-lg ml-1 self-center")
+                        if game.current_song:
+                            logger.debug("Drawing first card")
+                            dnd.Card(game.current_song)
+                    # draw_current_card(game.current_song)
 
                     with ui.column().classes("mb-6"):
                         # Toggle for play/pause
