@@ -6,9 +6,13 @@ import components.draganddrop as dnd
 from components.draganddrop import SortableColumn, SortableRow
 from components.game_state import MoshGame
 from config import ROOT_DIR, settings
-from spotify_functions import NoActiveDeviceFoundError, SpotifySong, force_play, play_pause
+from spotify_functions import NoActiveDeviceFoundError, force_play, play_pause
 
 logger = logging.getLogger(__name__)
+
+
+current_cardholder: SortableColumn | None = None
+current_card: dnd.Card | None = None
 
 
 def notify(item, location: str) -> None:
@@ -16,31 +20,24 @@ def notify(item, location: str) -> None:
     ui.notify(f"Dropped {item.title} on {location}")
 
 
-@ui.refreshable
-def draw_current_card(song: SpotifySong | None) -> None:
-    """Draw the current card of the game."""
-    if song is None:
-        return
-
-    logger.debug(f"Redrawing card: {song}")
-
-    with SortableColumn(group="test"):
-        ui.label("New song").classes("text-bold text-lg ml-1 self-center")
-        dnd.Card(song)
-
-
 def prepare_for_new_song(game: MoshGame, switch) -> None:
     """Get a new song, draw a new card and disable the reveal switch."""
+    if switch.value is False:
+        ui.notify("Need to reveal card to continue")
+        return
     logger.debug("Prepare for new song")
     logger.debug(f"Old song: {game.current_song}")
     if len(game.upcoming_recommended_songs) == 0:
         ui.notify("Getting new songs, please wait", position="top")
     game.get_new_song()
     logger.debug(f"New song: {game.current_song}")
-    draw_current_card.refresh(game.current_song)
+
+    if current_cardholder:
+        with current_cardholder:
+            global current_card
+            current_card = dnd.Card(game.current_song)
     switch.set_value(False)
     try:
-        # play_pause(resume=False)
         force_play(song=game.current_song)
     except NoActiveDeviceFoundError as e:
         ui.notify(e)
@@ -51,7 +48,13 @@ def reveal_conceal_song(game: MoshGame, switch: ui.switch) -> None:
     if game.current_song is None:
         return
     game.current_song.reveal = switch.value
-    draw_current_card.refresh(game.current_song)
+    logger.debug(f"Switched reveal to {switch.value}")
+    global current_card
+    logger.debug(f"Redrawing card: {game.current_song}")
+    if current_card is None:
+        logger.debug("No card")
+    else:
+        current_card.show_reveal()
 
 
 @ui.refreshable
@@ -76,7 +79,10 @@ def draw_gameboard(game: MoshGame) -> None:
                             text="Reveal", on_change=lambda enabled: reveal_conceal_song(game, enabled)
                         )
                         new_song_button.on("click", lambda: prepare_for_new_song(game, reveal_switch))
-                    draw_current_card(game.current_song)
+
+                    # 2nd Grid spot
+                    global current_cardholder
+                    current_cardholder = SortableColumn(group="test")
 
                     with ui.column().classes("mb-6"):
                         # Toggle for play/pause
@@ -97,6 +103,7 @@ def draw_gameboard(game: MoshGame) -> None:
                             with ui.skeleton(bordered=True, animation="none"):
                                 with SortableRow(group="test"):
                                     if game.current_song:
+                                        logger.debug(f"Player {i + 1} gets song {game.current_song}")
                                         game.current_song.reveal = True
                                         dnd.Card(game.current_song)
                                         game.get_new_song()
@@ -106,3 +113,12 @@ def draw_gameboard(game: MoshGame) -> None:
             ui.label("Wrong guesses").classes("text-bold text-xl justify-self-center")
             with ui.skeleton(bordered=True, animation="none").classes("object-right"):
                 SortableRow(group="test")
+
+        # Fill the cardholder only now to get the (correct) current song after the players got theirs
+        with current_cardholder:
+            logger.debug("Drawing card holder")
+            ui.label("New song").classes("text-bold text-lg ml-1 self-center")
+            if game.current_song:
+                logger.debug(f"Drawing first card with song: {game.current_song}")
+                global current_card
+                current_card = dnd.Card(game.current_song)

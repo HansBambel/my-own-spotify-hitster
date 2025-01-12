@@ -5,7 +5,6 @@ from nicegui import binding
 from spotify_functions import (
     SpotifySong,
     from_recommendation_to_spotify_song,
-    get_recommendations,
     get_songs_from_custom_playlist,
     get_songs_from_saved_playlist,
 )

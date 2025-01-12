@@ -4,9 +4,10 @@
 </p>
 
 ![Interface](example_interface.png)
-> [!WARNING] 
+> [!WARNING]
 > Spotify removed the ability to get [recommendations](https://developer.spotify.com/documentation/web-api/reference/get-recommendations).
 > This means that the app is currently not working as intended. [This](https://community.spotify.com/t5/Spotify-for-Developers/Changes-to-Web-API/td-p/6540414) is the Spotify-thread about the issue.
+> Instead, songs from the playlist are chosen.
 
 Play Hitster with your own Spotify account based on your liked songs or a playlist.
 Play alone or with friends.
@@ -24,11 +25,11 @@ The UI is also (clearly) a work in progress.
 
 # Run the app
 1. Install [uv](https://docs.astral.sh/uv/getting-started/installation/)
-2. Install dependencies:
-```shell
-uv sync
-```
+2. (Optional) Install dependencies when developing:
+   ```shell
+   uv sync
+   ```
 3. Start app:
-```shell
-python src\main.py
-```
+   ```shell
+   uv run python src\main.py
+   ```
