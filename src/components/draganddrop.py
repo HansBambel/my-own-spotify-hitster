@@ -15,12 +15,14 @@ class Card(ui.card):
         super().__init__()
         self.item = item
         with self.props("draggable").classes("w-full cursor-pointer bg-grey-1"):
-            self.to_display = ui.column()
-            self.update()
+            self.info_spot = ui.column()
+            self.show_reveal()
 
-    def update(self) -> None:
+    @ui.refreshable
+    def show_reveal(self) -> None:
         """Update the information on the card. Depends on reveal."""
-        with self.to_display:
+        self.info_spot.clear()
+        with self.info_spot:
             if self.item.reveal:
                 ui.label(f"{self.item.artist}")
                 # ui.label("-")
