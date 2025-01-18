@@ -84,7 +84,7 @@ def get_songs_from_saved_playlist(amount=5) -> list[dict]:
 
 
 def get_songs_from_custom_playlist(playlist_url: str, amount=5) -> list[dict]:
-    """Get 5 songs from the given playlist and get `amount` songs from it. Returns list of spotify songs."""
+    """Get `amount` songs from the given playlist. Returns list of spotify songs."""
     sp = get_spotify_client()
 
     logger.debug(f"Getting songs from custom playlist: {playlist_url}")

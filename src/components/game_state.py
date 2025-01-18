@@ -28,20 +28,23 @@ class MoshGame:
     round: int = 1
     past_songs: list[SpotifySong]
 
+    use_playlists: binding.BindableProperty
     custom_playlist: binding.BindableProperty
     recommendations_based_on: list[dict]
     upcoming_recommended_songs: list[SpotifySong]
     min_popularity: int = 69
 
-    def __init__(self, number_players: int = 2, custom_playlist: str | None = None) -> None:
+    def __init__(self, number_players: int = 2, custom_playlist: str | None = None, song_batches: int = 10) -> None:
         """Initialize MOSH game state."""
         logger.debug(f"Creating MOSH game state with {number_players} players.")
         self.number_players = number_players
         self.player_names = {f"Player {i+1}": f"Player {i+1}" for i in range(number_players)}
         self.past_songs = []
+        self.use_playlists = True if custom_playlist else False
         self.custom_playlist = custom_playlist
         self.recommendations_based_on = []
         self.upcoming_recommended_songs = []
+        self.song_batches = song_batches
 
     def start_game(self) -> None:
         """Fill game state with songs."""
@@ -55,10 +58,12 @@ class MoshGame:
         Filters duplicates.
         """
         logger.debug("Filling upcoming songs.")
-        if self.custom_playlist:
-            self.recommendations_based_on = get_songs_from_custom_playlist(self.custom_playlist)
+        if self.use_playlists and self.custom_playlist:
+            self.recommendations_based_on = get_songs_from_custom_playlist(
+                self.custom_playlist, amount=self.song_batches
+            )
         else:
-            self.recommendations_based_on = get_songs_from_saved_playlist()
+            self.recommendations_based_on = get_songs_from_saved_playlist(amount=self.song_batches)
 
         upcoming_recommended_songs_raw = [song["track"] for song in self.recommendations_based_on]
         new_recommendations = [from_recommendation_to_spotify_song(song) for song in upcoming_recommended_songs_raw]

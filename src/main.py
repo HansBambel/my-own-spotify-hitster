@@ -7,6 +7,9 @@ from components.game_state import MoshGame
 
 logger = logging.getLogger(__name__)
 
+MY_HITSTER_PLAYLIST_LINK = "https://open.spotify.com/playlist/69El5G3vSe2btfG0kLztbh?si=a01fbfbe8a254a6b"
+STETWF_PLAYLIST_LINK = "https://open.spotify.com/playlist/3M1Ib7CzYyy9pOWpmwlfIr?si=f65cd5c9884648b4"
+
 
 @ui.refreshable
 def player_names_input(game: MoshGame):
@@ -33,12 +36,19 @@ with ui.element().classes("w-full justify-start items-center"):
 
                 ui.button("New game", on_click=lambda: start_game(game))
                 # implement multiple based on approaches
-                based_on = ui.radio(["Based on liked songs", "Playlist"], value="Based on liked songs")
-                with ui.row().bind_visibility_from(based_on, "value", value="Playlist"):
-                    ui.input(
-                        label="Playlist-URL",
-                        placeholder="https://open.spotify.com/playlist/3M1Ib7CzYyy9pOWpmwlfIr?si=f65cd5c9884648b4",
-                    ).bind_value_to(game, "custom_playlist")
+                based_on = ui.radio({False: "Based on liked songs", True: "Playlist"}, value=False).bind_value_to(
+                    game, "use_playlists"
+                )
+                ui.radio(
+                    {
+                        MY_HITSTER_PLAYLIST_LINK: "My own Hitster",
+                        STETWF_PLAYLIST_LINK: "Songs that excite the white folk",
+                    }
+                ).bind_visibility_from(based_on, "value", value=True).bind_value_to(game, "custom_playlist")
+                # ui.input(
+                #     label="Playlist-URL",
+                #     value="https://open.spotify.com/playlist/3M1Ib7CzYyy9pOWpmwlfIr?si=f65cd5c9884648b4",
+                # )
 
         with ui.tab_panel("Game"):
             if game is not None:
