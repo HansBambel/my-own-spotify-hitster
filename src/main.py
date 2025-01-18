@@ -43,12 +43,13 @@ with ui.element().classes("w-full justify-start items-center"):
                     {
                         MY_HITSTER_PLAYLIST_LINK: "My own Hitster",
                         STETWF_PLAYLIST_LINK: "Songs that excite the white folk",
+                        "": "Custom playlist",
                     }
                 ).bind_visibility_from(based_on, "value", value=True).bind_value_to(game, "custom_playlist")
-                # ui.input(
-                #     label="Playlist-URL",
-                #     value="https://open.spotify.com/playlist/3M1Ib7CzYyy9pOWpmwlfIr?si=f65cd5c9884648b4",
-                # )
+                ui.input(
+                    label="Playlist-URL",
+                    placeholder="https://open.spotify.com/playlist/3M1Ib7CzYyy9pOWpmwlfIr?si=f65cd5c9884648b4",
+                ).bind_visibility_from(based_on, "value", value=True).bind_value_to(game, "custom_playlist")
 
         with ui.tab_panel("Game"):
             if game is not None:
