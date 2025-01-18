@@ -1,4 +1,5 @@
 from collections.abc import Callable
+from typing import ClassVar, Self
 
 from nicegui import ui
 from nicegui.awaitable_response import AwaitableResponse
@@ -36,18 +37,29 @@ class Card(ui.card):
 class SortableElement(ui.element, component=ROOT_DIR / "resources" / "sortable_element.js"):  # type: ignore
     """Sortable Row element."""
 
+    sortable_list: ClassVar[dict[str, Self]] = {}
+
     def __init__(self, *args, group: str, on_change: Callable | None = None, **kwargs) -> None:
         """Assign the group and on_change-function."""
         super().__init__()
         self.on("item-drop", self.drop)
         self.on_change = on_change
 
+        self._classes.append("nicegui-column")
         self._props["group"] = group
+        SortableElement.sortable_list[self.id] = self
 
     def drop(self, e) -> None:
         """Run the on_change function."""
         if self.on_change:
-            self.on_change(e)
+            self.on_change(
+                e.args["new_index"],
+                e.args["old_index"],
+                SortableElement.sortable_list[e.args["new_list"]],
+                SortableElement.sortable_list[e.args["old_list"]],
+            )
+        else:
+            print(e.args)
 
     def makeSortable(self) -> None:
         """Make the element sortable."""
