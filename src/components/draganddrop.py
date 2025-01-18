@@ -1,11 +1,15 @@
+import logging
 from collections.abc import Callable
 from typing import ClassVar, Self
 
 from nicegui import ui
 from nicegui.awaitable_response import AwaitableResponse
+from nicegui.events import GenericEventArguments
 
 from config import ROOT_DIR
 from spotify_functions import SpotifySong
+
+logger = logging.getLogger(__name__)
 
 
 class Card(ui.card):
@@ -49,8 +53,9 @@ class SortableElement(ui.element, component=ROOT_DIR / "resources" / "sortable_e
         self._props["group"] = group
         SortableElement.sortable_list[self.id] = self
 
-    def drop(self, e) -> None:
+    def drop(self, e: GenericEventArguments) -> None:
         """Run the on_change function."""
+        print(e)
         if self.on_change:
             self.on_change(
                 e.args["new_index"],
@@ -59,7 +64,7 @@ class SortableElement(ui.element, component=ROOT_DIR / "resources" / "sortable_e
                 SortableElement.sortable_list[e.args["old_list"]],
             )
         else:
-            print(e.args)
+            logger.debug(e.args)
 
     def makeSortable(self) -> None:
         """Make the element sortable."""

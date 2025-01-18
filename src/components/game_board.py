@@ -15,11 +15,6 @@ current_cardholder: SortableColumn | None = None
 current_card: dnd.Card | None = None
 
 
-def notify(item, location: str) -> None:
-    """Notify the player about the card movement."""
-    ui.notify(f"Dropped {item.title} on {location}")
-
-
 def prepare_for_new_song(game: MoshGame, switch) -> None:
     """Get a new song, draw a new card and disable the reveal switch."""
     if switch.value is False:
@@ -108,7 +103,6 @@ def draw_gameboard(game: MoshGame) -> None:
                                         dnd.Card(game.current_song)
                                         game.get_new_song()
 
-        # TODO put this on the right side
         with ui.element().classes("w-1/4"):
             ui.label("Wrong guesses").classes("text-bold text-xl justify-self-center")
             with ui.skeleton(bordered=True, animation="none").classes("object-right"):
