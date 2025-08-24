@@ -1,5 +1,6 @@
-from src.components.draganddrop import SortableRow as DndRow
 from nicegui import ui
+
+from src.components.draganddrop import SortableRow as DndRow
 
 with ui.row():
     for i in range(10):

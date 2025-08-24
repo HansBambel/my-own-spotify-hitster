@@ -27,6 +27,10 @@ def prepare_for_new_song(game: MoshGame, switch) -> None:
     game.get_new_song()
     logger.debug(f"New song: {game.current_song}")
 
+    if not game.current_song:
+        logger.error("No song to play. This should not happen.")
+        return
+
     if current_cardholder:
         with current_cardholder:
             global current_card
@@ -46,7 +50,7 @@ def reveal_conceal_song(game: MoshGame, switch: ui.switch) -> None:
     logger.debug(f"Switched reveal to {switch.value}")
     global current_card
     logger.debug(f"Redrawing card: {game.current_song}")
-    if current_card is None:
+    if not current_card:
         logger.debug("No card")
     else:
         current_card.show_reveal()
