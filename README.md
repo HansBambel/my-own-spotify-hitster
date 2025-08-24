@@ -33,3 +33,6 @@ The UI is also (clearly) a work in progress.
    ```shell
    uv run python src\main.py
    ```
+
+> [!NOTE]
+> The app will play music on your active Spotify device (e.g. sometimes you need to start playing music on your phone/computer first).
