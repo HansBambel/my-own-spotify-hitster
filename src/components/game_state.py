@@ -2,7 +2,7 @@ import logging
 
 from nicegui import binding
 
-from spotify_functions import (
+from src.spotify_functions import (
     SpotifySong,
     from_recommendation_to_spotify_song,
     get_songs_from_custom_playlist,
@@ -38,7 +38,7 @@ class MoshGame:
         """Initialize MOSH game state."""
         logger.debug(f"Creating MOSH game state with {number_players} players.")
         self.number_players = number_players
-        self.player_names = {f"Player {i+1}": f"Player {i+1}" for i in range(number_players)}
+        self.player_names = {f"Player {i + 1}": f"Player {i + 1}" for i in range(number_players)}
         self.past_songs = []
         self.use_playlists = True if custom_playlist else False
         self.custom_playlist = custom_playlist
@@ -69,7 +69,7 @@ class MoshGame:
         new_recommendations = [from_recommendation_to_spotify_song(song) for song in upcoming_recommended_songs_raw]
         logger.debug(f"Found {len(new_recommendations)} new recommendations.")
         self.upcoming_recommended_songs = [song for song in new_recommendations if song not in self.past_songs]
-        logger.debug(f"Found {len(new_recommendations)-len(self.upcoming_recommended_songs)} duplicates.")
+        logger.debug(f"Found {len(new_recommendations) - len(self.upcoming_recommended_songs)} duplicates.")
         if len(self.upcoming_recommended_songs) == 0:
             # All songs are duplicates -> call _fill_upcoming songs again
             self._fill_upcoming_songs()

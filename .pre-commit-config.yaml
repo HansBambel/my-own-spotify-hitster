@@ -3,7 +3,7 @@ default_language_version:
 
 repos:
 -   repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.5.0
+    rev: v6.0.0
     hooks:
     - id: end-of-file-fixer
       exclude: ^(.*.xlsx|.+.xls|.*.csv|.*.json|.*.pkl)
@@ -19,14 +19,14 @@ repos:
     - id: detect-private-key
 
 -   repo: https://github.com/charliermarsh/ruff-pre-commit
-    rev: 'v0.6.3'
+    rev: 'v0.12.10'
     hooks:
       - id: ruff
         args: [--fix, --exit-non-zero-on-fix]
       - id: ruff-format
 
 -   repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.11.2
+    rev: v1.17.1
     hooks:
     -   id: mypy
         additional_dependencies: [types-toml, types-requests, types-python-dateutil]

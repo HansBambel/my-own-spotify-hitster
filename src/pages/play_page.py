@@ -38,7 +38,7 @@ st.header(f"Music source: {st.session_state.source}")
 # Create a score for each player containing the number of correct guesses
 update_score_view()
 
-st.header(f"Current Player: {st.session_state.current_player+1}")
+st.header(f"Current Player: {st.session_state.current_player + 1}")
 
 
 # print(sp.currently_playing())

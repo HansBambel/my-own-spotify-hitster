@@ -6,8 +6,8 @@ from nicegui import ui
 from nicegui.awaitable_response import AwaitableResponse
 from nicegui.events import GenericEventArguments
 
-from config import ROOT_DIR
-from spotify_functions import SpotifySong
+from src.config import ROOT_DIR
+from src.spotify_functions import SpotifySong
 
 logger = logging.getLogger(__name__)
 
@@ -23,7 +23,7 @@ class Card(ui.card):
             self.info_spot = ui.column()
             self.show_reveal()
 
-    @ui.refreshable
+    @ui.refreshable_method
     def show_reveal(self) -> None:
         """Update the information on the card. Depends on reveal."""
         self.info_spot.clear()
@@ -41,7 +41,7 @@ class Card(ui.card):
 class SortableElement(ui.element, component=ROOT_DIR / "resources" / "sortable_element.js"):  # type: ignore
     """Sortable Row element."""
 
-    sortable_list: ClassVar[dict[str, Self]] = {}
+    sortable_list: ClassVar[dict[int, Self]] = {}
 
     def __init__(self, *args, group: str, on_change: Callable | None = None, **kwargs) -> None:
         """Assign the group and on_change-function."""

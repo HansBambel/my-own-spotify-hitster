@@ -16,9 +16,9 @@ def player_names_input(game: MoshGame):
     """Render input for player naming."""
     logger.debug(f"Player names input - value: {players_number.value}")
     for i in range(int(players_number.value)):
-        player_input = ui.input(label=f"Player {i+1}", placeholder=f"Player {i+1}")
-        player_input.value = f"Player {i+1}"
-        player_input.bind_value_to(game.player_names, f"Player {i+1}")
+        player_input = ui.input(label=f"Player {i + 1}", placeholder=f"Player {i + 1}")
+        player_input.value = f"Player {i + 1}"
+        player_input.bind_value_to(game.player_names, f"Player {i + 1}")
 
 
 with ui.element().classes("w-full justify-start items-center"):
