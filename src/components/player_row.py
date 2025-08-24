@@ -1,4 +1,4 @@
-from draganddrop import Row as DndRow
+from src.components.draganddrop import SortableRow as DndRow
 from nicegui import ui
 
 with ui.row():

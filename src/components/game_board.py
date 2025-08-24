@@ -2,11 +2,11 @@ import logging
 
 from nicegui import ui
 
-import components.draganddrop as dnd
-from components.draganddrop import SortableColumn, SortableRow
-from components.game_state import MoshGame
-from config import ROOT_DIR, settings
-from spotify_functions import NoActiveDeviceFoundError, force_play, play_pause
+import src.components.draganddrop as dnd
+from src.components.draganddrop import SortableColumn, SortableRow
+from src.components.game_state import MoshGame
+from src.config import ROOT_DIR, settings
+from src.spotify_functions import NoActiveDeviceFoundError, force_play, play_pause
 
 logger = logging.getLogger(__name__)
 
